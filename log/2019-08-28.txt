@@ -1,1 +1,0 @@
-Apply time : 2019-08-28 22:58:00 Apply period : 1h status : fail
