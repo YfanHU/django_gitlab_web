@@ -11,6 +11,7 @@
     - admin_password
     - admin_verification_code
     - admin_register_time 
+    - max_account_nb
 
 - account_sharing_register_info
     - register_id
