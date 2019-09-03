@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+
+    <script>
+        function delete_account(obj) {
+            console.log(obj.name);
+            var c = window.confirm('是否删除账号：' + obj.name);
+            if (c == true) {
+                r = new XMLHttpRequest();
+                r.open('GET', '/account_sharing/admin/delete_account/?aid=' + obj.id, true);
+                r.send();
+                r.onload = function () {
+                    {# TODO: 删除账号功能#}
+                    if (this.responseText == 'success') {
+                        alert('申请成功');
+                        location.reload();
+                    }
+                    else {
+                        alert(this.responseText);
+                    }
+
+                }
+            }
+        }
+        function delete_history(obj) {
+            var c = window.confirm('是否提前终止使用');
+            if (c == true) {
+                r = new XMLHttpRequest();
+                r.open('GET', '/account_sharing/admin/delete_history/?id=' + obj.name, true);
+                r.send();
+                r.onload = function () {
+                    if (this.responseText == 'success') {
+                        alert('删除成功');
+                        location.reload();
+                    } else {
+                        alert(this.responseText);
+                    }
+
+                }
+            }
+        }
+        function delete_apply(obj) {
+            var c = window.confirm('是否撤销、删除该申请记录');
+            if (c == true) {
+                r = new XMLHttpRequest();
+                r.open('GET', '/account_sharing/admin/delete_apply/?apply_id=' + obj.name, true);
+                r.send();
+                r.onload = function () {
+                    if (this.responseText == 'success') {
+                        alert('删除成功');
+                        location.reload();
+                    }
+                    else {
+                        alert('删除失败');
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+<a href='/account_sharing'>返回</a>
+<a href='/account_sharing/admin/logout'>注销</a>
+<a href='/account_sharing/admin/change_password'>修改密码</a>
+
+<div id="account_list">
+    <h1>当前账号信息</h1>
+    <p style="color:red;">{{ add_msg }}</p>
+    <a href='/account_sharing/admin/update_account/?aid=-999'>新增账号</a>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>aid</th>
+            <th>account_name</th>
+            <th>account_start_time</th>
+            <th>account_expire_time</th>
+            <th>account_type</th>
+        </tr>
+        </thead>
+        {% for i in account_list %}
+            <tr>
+                <td>{{ i.aid }}</td>
+                <td>{{ i.account_name }}</td>
+                <td>{{ i.account_start_time }}</td>
+                <td>{{ i.account_expire_time }}</td>
+                <td>{{ i.account_type }}</td>
+                <td><a href="/account_sharing/admin/update_account/?aid={{ i.aid }}">更新</a>
+                    <a id='{{ i.aid }}' name='{{ i.account_name }}' onclick="delete_account(this);">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+<div id="apply_history_list">
+    <h1>账号使用记录</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>account_name</th>
+            <th>apply_time</th>
+            <th>apply_duration</th>
+            <th>end_time</th>
+            <th>other_info</th>
+            <th>ops</th>
+        </tr>
+        </thead>
+        {% for i in apply_history_list %}
+            <tr>
+                <td>{{ i.account_name }}</td>
+                <td>{{ i.apply_time }}</td>
+                <td>{{ i.apply_duration }}</td>
+                <td>{{ i.end_time }}</td>
+                <td>{{ i.other_info }}</td>
+                {% if i.can_cancel == '1' %}
+                    <td>
+                        <a name='{{ i.id }}' onclick="delete_history(this);">提前终止使用</a>
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div id="admin_apply_info">
+    <h1>当前提交申请</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>申请单号</th>
+            <th>申请时间</th>
+            <th>申请内容</th>
+            <th>申请状态</th>
+            <th>ops</th>
+        </tr>
+        </thead>
+        {% for i in admin_apply_info %}
+            <tr>
+                <td>{{ i.apply_id }}</td>
+                <td>{{ i.apply_time }}</td>
+                <td>{{ i.apply_content }}</td>
+                <td>{{ i.apply_status }}</td>
+                <td><a onclick="delete_apply(this)" name="{{ i.apply_id }}">清除此纪录</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

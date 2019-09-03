@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>超级管理员</title>
+    <script>
+        function delete_admin(obj) {
+            var c = window.confirm('是否删除该用户');
+            if (c == true) {
+                r = new XMLHttpRequest();
+                r.open('GET', '/super/delete_admin/?uid=' + obj.name, true);
+                r.send();
+                r.onload = function () {
+                    if (this.responseText == 'success') {
+                        alert('删除成功');
+                        location.reload();
+                    } else {
+                        alert('删除失败');
+                    }
+                }
+            }
+        }
+
+        function approve_apply(obj) {
+            r = new XMLHttpRequest();
+            r.open('GET', '/super/approve_apply/?apply_id=' + obj.name, true);
+            r.send();
+            r.onload = function () {
+                if (this.responseText == 'success') {
+                    location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            }
+        }
+
+        function refuse_apply(obj) {
+            r = new XMLHttpRequest();
+            r.open('GET', '/super/refuse_apply/?apply_id=' + obj.name, true);
+            r.send();
+            r.onload = function () {
+                if (this.responseText == 'success') {
+                    location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            }
+        }
+
+        function approve_register(obj) {
+            r = new XMLHttpRequest();
+            r.open('GET', '/super/approve_register/?register_id=' + obj.name, true);
+            r.send();
+            r.onload = function () {
+                if (this.responseText == 'success') {
+                    alert('操作成功');
+                    location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            }
+        }
+
+        function refuse_register(obj) {
+            r = new XMLHttpRequest();
+            r.open('GET', '/super/refuse_register/?register_id=' + obj.name, true);
+            r.send();
+            r.onload = function () {
+                if (this.responseText == 'success') {
+                    alert('操作成功');
+                    location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<a href='/hyf2019.com'>返回主页</a>
+<div id="admin_list">
+    <h1>Admin list:</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>用户id</th>
+            <th>用户名</th>
+            <th>用户注册时间</th>
+            <th>ops</th>
+        </tr>
+        </thead>
+        {% for i in admin_list %}
+            <tr>
+                <td>{{ i.uid }}</td>
+                <td>{{ i.admin_username }}</td>
+                <td>{{ i.admin_register_time }}</td>
+                <td>
+                    <a name='{{ i.uid }}' onclick="delete_admin(this);">删除该账号</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div id="apply_list">
+    <h1>Apply list:</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>申请id</th>
+            <th>申请时间</th>
+            <th>申请用户</th>
+            <th>申请信息</th>
+            <th>ops</th>
+        </tr>
+        </thead>
+        {% for i in apply_list %}
+            <tr>
+                <td>{{ i.apply_id }}</td>
+                <td>{{ i.apply_time }}</td>
+                <td>{{ i.admin_username }}</td>
+                <td>{{ i.apply_content }}</td>
+                <td>
+                    <a name='{{ i.apply_id }}' onclick="approve_apply(this);">审批通过</a>
+                    <a name='{{ i.apply_id }}' onclick="refuse_apply(this);">审批拒绝</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div id="register_list">
+    <h1>Register list:</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>注册id</th>
+            <th>注册时间</th>
+            <th>注册用户</th>
+            <th>注册邮箱</th>
+            <th>ops</th>
+        </tr>
+        </thead>
+        {% for i in register_list %}
+            <tr>
+                <td>{{ i.register_id }}</td>
+                <td>{{ i.register_time }}</td>
+                <td>{{ i.admin_username }}</td>
+                <td>{{ i.email }}</td>
+                <td>
+                    <a name='{{ i.register_id }}' onclick="approve_register(this);">审批通过</a>
+                    <a name='{{ i.register_id }}' onclick="refuse_register(this);">审批拒绝</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+</body>
+</html>

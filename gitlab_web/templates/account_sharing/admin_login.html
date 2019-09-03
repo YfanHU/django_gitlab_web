@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据管理</title>
+
+    <script>
+        window.onload=function(){
+            var adimn_login_info = '{{ adimn_login_info|safe }}';
+            console.log(adimn_login_info);
+            var target = document.getElementById('adimn_login_info');
+            target.innerText = adimn_login_info;
+            target.style.display = '';
+        }
+    </script>
+</head>
+<body>
+<a href='/hyf2019.com'>返回</a>
+<form action='/account_sharing/admin/login' method="post">
+    {% csrf_token %}
+    <p id='adimn_login_info' style="display: none; color: red;"></p>
+    用户名：<input type="text" name="admin_name">
+    密码：<input type="password" name="admin_password">
+    <input type="submit" value="登录">
+    <a href='/account_sharing/admin/register'>注册</a>
+</form>
+
+</body>
+</html>

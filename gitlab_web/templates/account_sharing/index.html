@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<script>
+function display(id){  
+	var traget=document.getElementById(id);  
+	traget.style.display="";  
+}
+
+function dismiss(id){
+    document.getElementById(id).style.display='none';
+}
+
+{#申请#}
+function apply_for_use(){
+	var obj = document.getElementById('select_period');
+	var obj2 = document.getElementById('select_type');
+	var index = obj.selectedIndex;
+	var index2 = obj2.selectedIndex;
+	var now = new Date();
+	var yy = now.getFullYear();      //年
+	var mm = now.getMonth() + 1;     //月
+	var dd = now.getDate();          //日
+	var hh = now.getHours();         //时
+	var ii = now.getMinutes();       //分
+	var ss = now.getSeconds();       //秒
+	var clock = yy + "-";
+	if(mm < 10) clock += "0";
+	clock += mm + "-";
+	if(dd < 10) clock += "0";
+	clock += dd + " ";
+	if(hh < 10) clock += "0";
+	clock += hh + ":";
+	if (ii < 10) clock += '0'; 
+	clock += ii + ":";
+	if (ss < 10) clock += '0'; 
+	clock += ss;
+    r = new XMLHttpRequest();
+	r.open('GET','/account_sharing/add_log/'+clock+'/'+obj.options[index].value+'/'+obj2.options[index2].value,true);
+	r.send();
+    r.onload = function() {
+        console.log(this.responseText);
+        var resp = JSON.parse(this.responseText);
+
+        document.getElementById("apply_use_result_info").innerHTML=resp['apply_use_result_info'];
+        document.getElementById("download_code_url").innerHTML=resp['download_code_url']
+        document.getElementById('log_content').innerHTML = resp['log_content'];
+        display('apply_use_result_info');
+    }
+}
+
+window.onload=function(){
+    var verify_status = '{{ verify_status|safe }}';
+    console.log(verify_status);
+    if (verify_status=='success'){
+        display('apply_use');
+        document.getElementById('log_content').innerHTML = '{{ log_content|safe }}';
+        display('log');
+        dismiss('form_verification');
+    } else {
+        display('verify_result');
+        document.getElementById('verify_result').innerHTML = '{{ verify_result|safe }}';
+    }
+}
+
+</script>
+</head>
+
+<body>
+<a href='/hyf2019.com'>返回</a>
+<a href='/account_sharing/admin/logout'>注销</a>
+<h1>个人功能网页</h1>
+<p><a href="/account_sharing/admin">账号管理</a></p>
+<div name="user_guide">
+    <h2>使用说明：</h2>
+    <ol>
+        <li>首先进入<a href="https://饿饭.cc">efan</a>下载客户端（需要注册）；</li>
+        <li>向管理员申请获取识别码；</li>
+        <li>输入识别码进入账号界面；</li>
+    </ol>
+	<h2>账号安全说明：</h2>
+    <ol>
+        <li>为了保证共享账号的安全，本站采用了多重加密方式；</li>
+        <li>获取共享账号密码的步骤如下:</li>
+        <li>下载密码解密客户端<a href="/download/?file_path=files/client/密码解密程序.exe">点击下载客户端</a></li>
+		<li>下载自己的独属密钥<a href="/download/?file_path=files/client/{{ request.COOKIES.admin_username }}.code">点击下载我的私钥</a></li>
+        <li>申请账号后，会提示下载加密文件，将以上三个文件保存在同一目录下，<strong>请不要改变文件名称</strong></li>
+        <li>运行解密客户端，获取账号密码</li>
+    </ol>
+</div>
+
+<form method="post" action="/account_sharing/verify_code" id = 'form_verification'>
+    {% csrf_token %}
+    识别码:<br><input type="text" name="recognition_code">
+    <input type="submit" value="提交">
+    <p id='verify_result' style="display: none; color: red;"></p>
+</form>
+
+<div id="apply_use" style="display: none;">
+    <h3>申请使用：</h3>
+    <p>请先确认<a href='#log'><b>日志</b></a>中账号空闲</p>
+
+    选择时长：<select id='select_period' name="period">
+        <option value="1h">一小时</option>
+        <option value="2h">二小时</option>
+        <option value="4h">四小时</option>
+        <option value="8h">八小时</option>
+    </select>
+    选择类型：<select id='select_type' name="type">
+        <option value="NORMAL">普通VPN</option>
+        <option value="GAMING">游戏加速</option>
+    </select>
+    <button type="button" onclick="apply_for_use()">申请</button>
+    <p id='apply_use_result_info' style="display: none; color: red;"></p>
+    <p id="download_code_url"></p>
+</div>
+
+<div id="log" style="display: none;">
+    <h3>当前可用请列表：</h3>
+    <p id="log_content"></p>>
+</div>
+
+
+<script type=”text/javascript”>
+
+</script>
+</body>
+
+
+
+</html>
+
+

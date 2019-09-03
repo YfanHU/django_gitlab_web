@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新账号</title>
+</head>
+<body>
+
+<p style="color:red;"> {{ warning_text }}</p>
+<form method="post" action="/account_sharing/admin/add_account">
+     {% csrf_token %}
+    <table>
+        <tr>
+            <td>账号登陆名:</td>
+            <td><input type="text" name='account_name'></td>
+        </tr>
+        <tr>
+            <td>账号密码：</td>
+            <td><input type="text" name='account_password'></td>
+        </tr>
+        <tr>
+            <td>账号过期时间:</td>
+            <td><input type="date" name='account_expire_time' value="2020-01-01"></td>
+        </tr>
+        <tr>
+            <td>账号类型:</td>
+            <td>
+                <input type="radio" name="account_type" value="NORMAL" checked>一般VPN
+                <input type="radio" name="account_type" value="GAMING">游戏加速
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="新增账号">
+</form>
+</body>
+</html>

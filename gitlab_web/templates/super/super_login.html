@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>超级管理员登陆</title>
+</head>
+<body>
+<p style="color:red;">{{ login_msg }}</p>
+<form method="post" action="/super">
+    {% csrf_token %}
+    <label>输入超级管理员密码：</label><input type="password" name="password"><input type="submit" value="登陆">
+</form>
+</body>
+</html>

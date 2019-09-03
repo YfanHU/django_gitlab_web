@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册账号</title>
+
+    <script>
+        function valid_form() {
+            var warning_text = document.getElementById('warning_text');
+            var form = document.getElementById('form-resigter');
+            admin_username = form.admin_username.value;
+            admin_password = form.admin_password.value;
+            admin_password_confirme = form.admin_password_confirme.value;
+            invitation_code = form.invitation_code.value;
+            email = form.email.value;
+            console.log(admin_username,admin_password,email,invitation_code);
+            if ((admin_username=='') | (admin_password=='')| (email=='')| (invitation_code=='')){
+                warning_text.innerText = '有未填写字段';
+                return false;
+            }
+
+            var reg = /^[0-9a-zA-Z\u4e00-\u9fa5_]{3,16}$/;
+            if (!reg.test(admin_username)) {
+                warning_text.innerText = '用户名应为3~16位大小写字母及下划线组成';
+                return false;
+            }
+            var ePattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            if (!ePattern.test(email)) {
+                warning_text.innerText = '邮箱格式不正确';
+                return false;
+            }
+
+            if (admin_password != admin_password_confirme) {
+                warning_text.innerText = '两次密码输入不一致';
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</head>
+
+<body>
+
+<p style="color:red;" id="warning_text"> {{ warning_text }}</p>
+<form id='form-resigter' method="post" action="/account_sharing/admin/register" onsubmit="return valid_form()">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>账号登陆名:</td>
+            <td><input type="text" id='' name='admin_username'></td>
+        </tr>
+        <tr>
+            <td>账号密码：</td>
+            <td><input type="password" name='admin_password'></td>
+        </tr>
+        <tr>
+            <td>确认账号密码：</td>
+            <td><input type="password" name='admin_password_confirme'></td>
+        </tr>
+        <tr>
+            <td>邮箱：</td>
+            <td><input type="text" name='email'></td>
+        </tr>
+        <tr>
+            <td>邀请码：</td>
+            <td><input type="text" name='invitation_code'></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="注册"></td>
+        </tr>
+    </table>
+
+</form>
+</body>
+</html>
