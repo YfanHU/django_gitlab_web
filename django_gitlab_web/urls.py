@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path
-from gitlab_web.views import functional_views,views
+from gitlab_web.views import functional_views,views,views_qqmusic_download
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -42,10 +42,11 @@ urlpatterns = [
     path('account_sharing/admin/delete_account/',views.account_admin_delete),
     path('account_sharing/admin/delete_history/',views.account_history_delete),
     path('account_sharing/admin/delete_apply/',views.admin_delete_apply),
-
     path('account_sharing/verify_admin_username/',functional_views.account_sharing_verify_admin_username),
     path('account_sharing/verify_invitation_code/', functional_views.account_sharing_verify_invitation_code),
-
     # /account_sharing/add_log/2019-08-23%2015:55:08/4h
     re_path(r'^account_sharing/add_log/(.+)/(\w+)/(\w+)$',views.add_log),
+
+    path('music_download',views_qqmusic_download.index),
+    path('music_download/qqmusic_download',views_qqmusic_download.download_music),
 ]
