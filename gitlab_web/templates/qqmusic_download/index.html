@@ -3,9 +3,9 @@
     <meta charset="UTF-8">
     <title>听说这里提供免费音乐下载哟</title>
     <script>
-        function check_form_data(){
+        function check_form_data() {
             element = document.getElementById('qqmusic_download_form');
-            if (element.songname.value == ''){
+            if (element.songname.value == '') {
                 alert('请输入有效的歌曲名！');
                 return false;
             }
@@ -14,12 +14,14 @@
     </script>
 </head>
 <body>
+<a href='/hyf2019.com'>返回</a>
 <div>
     <p style="color:orange;">警告：本站所有内容仅供玩耍，请勿用于任何商业用途</p>
 </div>
 <div>
     <p style="color:red;">{{ warn_msg }}</p>
-    <form id='qqmusic_download_form' method="post" action="/music_download/qqmusic_download" onsubmit="return check_form_data()">
+    <form id='qqmusic_download_form' method="post" action="/music_download/qqmusic_download"
+          onsubmit="return check_form_data()">
         {% csrf_token %}
         输入想要下载的歌曲名：<input name='songname' type="text"><input type="submit" value="确定">
         <br>
