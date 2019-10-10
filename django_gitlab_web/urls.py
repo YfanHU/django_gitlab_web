@@ -30,6 +30,8 @@ urlpatterns = [
     path('hyf2019.com', views.index),
     path('account_sharing', views.account_sharing_verify),
 
+    path('help/efan_downloadguide',views.help_efan_downloadguide),
+
     path('super', views.super_admin),
     path('super/delete_admin/', views.super_delete_admin),
     path('super/approve_apply/', views.super_approve_apply),

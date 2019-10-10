@@ -55,6 +55,8 @@ def download(request):
 def index(request):
     return render(request, 'index.html')
 
+def help_efan_downloadguide(request):
+    return render(request,'help/efan_downloadguide.html')
 
 # 进入account_sharing界面
 def account_sharing(request):
